@@ -38,7 +38,6 @@ export class UsersService {
     });
     return this.usersRepo.save(user);
   }
-  
 
   async setVerified(mobile: string) {
     await this.usersRepo.update({ mobile }, { isVerified: true });

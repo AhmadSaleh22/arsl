@@ -1,4 +1,4 @@
-import { IsMobilePhone } from 'class-validator';
+import { IsString, IsNotEmpty } from 'class-validator';
 export class ForgotDto {
-  @IsMobilePhone() mobile: string;
+  @IsString() @IsNotEmpty() mobile: string;
 }

@@ -1,4 +1,4 @@
-import { IsMobilePhone } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 export class ResendOtpDto {
-  @IsMobilePhone() mobile: string;
+  @IsString() @IsNotEmpty() mobile: string;
 }

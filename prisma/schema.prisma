@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(uuid())
+  fullName      String
+  mobile        String    @unique
+  email         String?   @unique
+  passwordHash  String
+  type          String
+  roles         String[]  @default(["patient"])
+  isVerified    Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  otps          OtpCode[] @relation("UserOtps")
+  otpAttempts   OtpAttempt[]
+  loginAttempts LoginAttempt[]
+}
+
+model OtpCode {
+  id              String   @id @default(uuid())
+  mobile          String
+  hashedCode      String
+
+  userId          String?
+  user            User?    @relation("UserOtps", fields: [userId], references: [id])
+
+  @@index([mobile])
+  expiresAt       DateTime
+  resendAllowedAt DateTime?
+  createdAt       DateTime @default(now())
+}
+
+model OtpAttempt {
+  id           String   @id @default(uuid())
+  mobile       String   @unique
+  attempts     Int      @default(0)
+  blockedUntil DateTime?
+  updatedAt    DateTime @updatedAt
+  createdAt    DateTime @default(now())
+
+  userId       String?
+  user         User?    @relation(fields: [userId], references: [id])
+}
+
+model LoginAttempt {
+  id           String   @id @default(uuid())
+  mobile       String   @unique
+  attempts     Int      @default(0)
+  blockedUntil DateTime?
+  updatedAt    DateTime @updatedAt
+  createdAt    DateTime @default(now())
+
+  userId       String?
+  user         User?    @relation(fields: [userId], references: [id])
+}

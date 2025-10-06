@@ -3,9 +3,9 @@ import {
   IsOptional,
   IsString,
   MinLength,
+  IsNotEmpty,
 } from 'class-validator';
 export class LoginDto {
-  @IsMobilePhone() mobile: string;
+  @IsString() @IsNotEmpty() mobile: string;
   @IsString() @MinLength(6) password: string;
-  @IsOptional() rememberMe?: boolean;
 }
